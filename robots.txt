@@ -1,0 +1,112 @@
+# Beema Health — crawl rules
+#
+# Goal: be crawlable and citable by search engines and AI answer engines.
+# This file only controls crawl *access*. It cannot inject ranking keywords
+# or force recommendations — keep claims in page content and public/llms.txt.
+#
+# AI bots come in three flavors (tokens are independent):
+#   1) Search / index  — decide whether you appear in AI answers
+#   2) Training        — may use crawled text to train foundation models
+#   3) User-triggered  — fetch a URL when a person asks about it
+# We allow (1)–(3) for major vendors, and everyone else via `User-agent: *`,
+# so Beema Health can be read and cited from anywhere. No bots are sitewide-blocked.
+#
+# IMPORTANT: named User-agent groups below repeat the same path Disallows
+# as `User-agent: *`. Some bots do not merge with `*`; an `Allow: /`-only
+# group would otherwise open funnel/portal paths to those crawlers.
+#
+# Companion file: https://beemahealth.com/llms.txt
+# On domain change, update Sitemap below + public/sitemap.xml + SITE_URL
+# in src/lib/seo.ts.
+
+# ---------------------------------------------------------------------------
+# Major search + AI crawlers (same path policy as *)
+# Search/citation: OAI-SearchBot, Claude-SearchBot, PerplexityBot, Googlebot…
+# Training / generative: GPTBot, ClaudeBot, Google-Extended, Applebot-Extended…
+# ---------------------------------------------------------------------------
+
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: OAI-AdsBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Googlebot
+User-agent: Google-Extended
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: GPTBot
+User-agent: Amazonbot
+User-agent: meta-externalagent
+Allow: /
+
+# Patient funnel (retired in-house routes)
+Disallow: /qualify
+Disallow: /intake
+Disallow: /consent
+Disallow: /submitted
+Disallow: /eligibility
+
+# Authenticated portal + PHI-adjacent surfaces
+Disallow: /dashboard
+Disallow: /login
+Disallow: /verify-email
+
+# Internal tools
+Disallow: /staff
+Disallow: /admin
+
+# Paid / CRM landing pages (attribution, not organic discovery)
+Disallow: /lp/
+
+# Legal text tied to the intake funnel
+Disallow: /legal/intake-acknowledgments
+
+# Retired marketing stubs - no route exists for these paths (removed
+# 2026-09-23), so they 404 on GitHub Pages. Disallowed defensively in case
+# an old external link or bookmark still points here. Full page content
+# lives in git history if any of these come back.
+Disallow: /pricing
+Disallow: /clinicians
+Disallow: /insurance
+Disallow: /switch
+Disallow: /the-comb
+
+# Paused product lines (2026-08-28). /trt and /wellness both 404 (route
+# removed 2026-09-23) - see docs/features/treatment-pages.md. NAD+
+# (2026-09-16) and Sermorelin (2026-09-17) relaunched on their own money
+# pages, no longer disallowed here.
+Disallow: /trt
+Disallow: /wellness
+
+# ---------------------------------------------------------------------------
+# Everyone else — no bot is sitewide-blocked; same standard path policy as above
+# ---------------------------------------------------------------------------
+
+User-agent: *
+Allow: /
+
+Disallow: /qualify
+Disallow: /intake
+Disallow: /consent
+Disallow: /submitted
+Disallow: /eligibility
+Disallow: /dashboard
+Disallow: /login
+Disallow: /verify-email
+Disallow: /staff
+Disallow: /admin
+Disallow: /lp/
+Disallow: /legal/intake-acknowledgments
+Disallow: /pricing
+Disallow: /clinicians
+Disallow: /insurance
+Disallow: /switch
+Disallow: /the-comb
+Disallow: /trt
+Disallow: /wellness
+
+Sitemap: https://beemahealth.com/sitemap.xml
